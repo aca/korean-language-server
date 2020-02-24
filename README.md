@@ -3,9 +3,9 @@
 <b>Experimental !</b> 
 
 Language server implementation for Korean,
-powered by [한국어 맞춤법/문법 검사기](https://speller.cs.pusan.ac.kr/).
-
-![record](./record.svg)
+powered by [한국어 맞춤법/문법 검사기](https://speller.cs.pusan.ac.kr/).  
+> 사진 녹화가 좀 깨집니다만, 실제론 발생하지 않습니다..
+![sample](./sample.gif)
 
 ---
 
