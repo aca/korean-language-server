@@ -12,7 +12,7 @@ powered by [한국어 맞춤법/문법 검사기](https://speller.cs.pusan.ac.kr
 
 ### Installation
 ```
-npm i -g  korean-language-server
+npm i -g korean-ls
 ```
 or
 ```
