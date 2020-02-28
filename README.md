@@ -2,9 +2,12 @@
 
 <b>Experimental !</b> 
 
-Language server implementation for Korean,
+[Language server implementation](https://microsoft.github.io/language-server-protocol/) for Korean,
 powered by [한국어 맞춤법/문법 검사기](https://speller.cs.pusan.ac.kr/).  
-> 사진 녹화가 좀 깨집니다만, 실제론 발생하지 않습니다..
+
+It's Korean version of [grammarly](http://www.grammarly.com/), famous writing assitant app for English.  
+As grammarly does, it detects grammar error, supports quick fix. It also supports some level of english.
+
 ![sample](./sample.gif)
 
 ---
@@ -28,7 +31,12 @@ Should work with any client implementation, vscode/emacs/sublime/vim. (But not t
 - [ coc.nvim ](https://github.com/neoclide/coc.nvim)
 
   ```
-  $ nvim -c ':CocConfig'
+  $ vim ~/.vimrc
+
+  " Fix autofix problem of current line
+  nmap <leader>qf  <Plug>(coc-fix-current)
+
+  $ vim -c ':CocConfig'
 
   "languageserver": {
     "korean": {

@@ -1,6 +1,6 @@
 {
   "name": "korean-ls",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Language server implementation for Korean",
   "main": "main.js",
   "scripts": {
@@ -13,14 +13,22 @@
   "author": "aca",
   "license": "ISC",
   "dependencies": {
-    "@types/node": "^13.7.4",
+    "@types/he": "^1.1.0",
+    "@types/node": "^13.7.6",
     "axios": "^0.19.2",
     "he": "^1.2.0",
+    "log-to-file": "^2.0.2",
+    "query-string": "^6.11.0",
     "querystring": "^0.2.0",
     "typescript": "^3.8.2",
     "vscode-languageserver": "^6.1.1",
     "vscode-languageserver-textdocument": "^1.0.1",
     "winston": "^3.2.1"
   },
-  "repository": "aca/korean-language-server"
+  "repository": "aca/korean-language-server",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.21.0",
+    "@typescript-eslint/parser": "^2.21.0",
+    "eslint": "^6.8.0"
+  }
 }
