@@ -1,6 +1,6 @@
 {
   "name": "korean-ls",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Language server implementation for Korean",
   "main": "main.js",
   "scripts": {
