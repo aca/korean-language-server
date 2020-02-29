@@ -20,7 +20,7 @@ npm i -g korean-ls
 or
 ```
 git clone git@github.com:aca/korean-language-server.git && cd korean-language-server 
-npm install
+npm run build
 npm link
 ```
 ---

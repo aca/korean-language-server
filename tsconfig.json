@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "target": "es2017",
+      "module": "commonjs",
+		"noImplicitAny": false,
+		"noImplicitReturns": false,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+      "moduleResolution": "node",
+      "sourceMap": true,
+      "lib": [ "es2019" ],
+      "strict": true
+    },
+    "files": [
+        "main.ts"
+    ]
+}

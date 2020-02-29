@@ -4,7 +4,8 @@
   "description": "Language server implementation for Korean",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"No test\" specified."
+    "test": "echo \"No test\" specified.",
+    "build": "tsc"
   },
   "bin": {
     "korean-ls": "./main.js"
