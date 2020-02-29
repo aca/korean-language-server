@@ -5,26 +5,11 @@ const vscode_languageserver_1 = require("vscode-languageserver");
 const vscode_languageserver_textdocument_1 = require("vscode-languageserver-textdocument");
 const axios_1 = require("axios");
 const queryString = require("query-string");
-const winston = require("winston");
 const he = require("he");
-// const logger = winston.createLogger({
-//   transports: [
-//     new winston.transports.File({
-//       filename: "/tmp/korean-lsp.log",
-//       level: "info",
-//       handleExceptions: true,
-//       json: false,
-//       maxsize: 5242880, // 5MB
-//       maxFiles: 1
-//       // timestamp: true
-//     })
-//   ],
-//   format: winston.format.prettyPrint()
-// });
 const connection = vscode_languageserver_1.createConnection();
-// connection.console.info(`Sample server running in node ${process.version}`);
 const documents = new vscode_languageserver_1.TextDocuments(vscode_languageserver_textdocument_1.TextDocument);
 documents.listen(connection);
+connection.console.info(`korean language server running in node ${process.version}`);
 connection.onInitialize(() => {
     return {
         capabilities: {
@@ -34,12 +19,13 @@ connection.onInitialize(() => {
                 change: vscode_languageserver_1.TextDocumentSyncKind.Incremental
             },
             executeCommandProvider: {
-                commands: ["sample.fixMe"]
+                commands: ["korean.quickfix"]
             }
         }
     };
 });
 const getErrorList = async (text) => {
+    connection.console.info(`getting error list`);
     return axios_1.default
         .post("http://speller.cs.pusan.ac.kr/results", queryString.stringify({ text1: text.replace(/\n/g, "\r") }))
         .then(({ data }) => {
@@ -53,13 +39,11 @@ const getErrorList = async (text) => {
                 start: match.start,
                 end: match.end,
                 msg: `${match.candWord}\n${htmltoString(match.help)}`
-                // msg: `${match.orgStr} => ${match.candWord}\n${htmltoString(
-                //   match.help
-                // )}`
             };
         });
     })
-        .catch((error) => {
+        .catch(error => {
+        connection.console.error(JSON.stringify(error));
         return [];
     });
 };
@@ -106,13 +90,13 @@ connection.onCodeAction(params => {
         let fixList = msg.substr(0, msg.indexOf("\n")).split("|");
         return fixList.map(newStr => {
             const orgStr = textDocument.getText(diagnosis.range);
-            return vscode_languageserver_1.CodeAction.create(`${orgStr} => ${newStr}`, vscode_languageserver_1.Command.create(newStr, "sample.fixMe", textDocument.uri, diagnosis, newStr), vscode_languageserver_1.CodeActionKind.QuickFix);
+            return vscode_languageserver_1.CodeAction.create(`${orgStr} => ${newStr}`, vscode_languageserver_1.Command.create(newStr, "korean.quickfix", textDocument.uri, diagnosis, newStr), vscode_languageserver_1.CodeActionKind.QuickFix);
         });
     })
         .flat();
 });
 connection.onExecuteCommand(async (params) => {
-    if (params.command !== "sample.fixMe" || params.arguments === undefined) {
+    if (params.command !== "korean.quickfix" || params.arguments === undefined) {
         return;
     }
     const textDocument = documents.get(params.arguments[0]);

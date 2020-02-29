@@ -16,29 +16,14 @@ import {
 import { TextDocument } from "vscode-languageserver-textdocument";
 import axios from "axios";
 const queryString = require("query-string");
-const winston = require("winston");
 const he = require("he");
-
-// const logger = winston.createLogger({
-//   transports: [
-//     new winston.transports.File({
-//       filename: "/tmp/korean-lsp.log",
-//       level: "info",
-//       handleExceptions: true,
-//       json: false,
-//       maxsize: 5242880, // 5MB
-//       maxFiles: 1
-//       // timestamp: true
-//     })
-//   ],
-//   format: winston.format.prettyPrint()
-// });
-
 const connection = createConnection();
-// connection.console.info(`Sample server running in node ${process.version}`);
-
 const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
 documents.listen(connection);
+
+connection.console.info(
+  `korean language server running in node ${process.version}`
+);
 
 connection.onInitialize(() => {
   return {
@@ -49,13 +34,14 @@ connection.onInitialize(() => {
         change: TextDocumentSyncKind.Incremental
       },
       executeCommandProvider: {
-        commands: ["sample.fixMe"]
+        commands: ["korean.quickfix"]
       }
     }
   };
 });
 
 const getErrorList = async (text: string): Promise<any[]> => {
+  connection.console.info(`getting error list`);
   return axios
     .post(
       "http://speller.cs.pusan.ac.kr/results",
@@ -66,19 +52,17 @@ const getErrorList = async (text: string): Promise<any[]> => {
       const nextIndex = data.indexOf("}];\n");
 
       const rawData = data.substring(startIndex + 7, nextIndex + 2);
-      let xxx: SpellResponse[] = JSON.parse(rawData);
+      let xxx: SpellerResponse[] = JSON.parse(rawData);
       return xxx[0]?.errInfo?.map((match: ErrInfo) => {
         return {
           start: match.start,
           end: match.end,
           msg: `${match.candWord}\n${htmltoString(match.help)}`
-          // msg: `${match.orgStr} => ${match.candWord}\n${htmltoString(
-          //   match.help
-          // )}`
         };
       });
     })
-    .catch((error: any) => {
+    .catch(error => {
+      connection.console.error(JSON.stringify(error));
       return [];
     });
 };
@@ -136,7 +120,7 @@ connection.onCodeAction(params => {
           `${orgStr} => ${newStr}`,
           Command.create(
             newStr,
-            "sample.fixMe",
+            "korean.quickfix",
             textDocument.uri,
             diagnosis,
             newStr
@@ -149,7 +133,7 @@ connection.onCodeAction(params => {
 });
 
 connection.onExecuteCommand(async params => {
-  if (params.command !== "sample.fixMe" || params.arguments === undefined) {
+  if (params.command !== "korean.quickfix" || params.arguments === undefined) {
     return;
   }
 
@@ -181,6 +165,31 @@ const htmltoString = (rawStr: string) => {
   return msg;
 };
 
+// Sample response from api
+// [
+//   {
+//     "str": "안뇽",
+//     "errInfo": [
+//       {
+//         "help": "어린이들의 발음을 흉내내어 &apos;안뇽&apos;이라고 말하는 사람들이 종종 있습니다. 특히, 글을 쓸 때는 이러한 단어를 쓰지 않 도록 합시다.",
+//         "errorIdx": 0,
+//         "correctMethod": 2,
+//         "start": 0,
+//         "end": 2,
+//         "orgStr": "안뇽",
+//         "candWord": "안녕"
+//       }
+//     ],
+//     "idx": 0
+//   }
+// ]
+
+export interface SpellerResponse {
+  str: string;
+  errInfo: ErrInfo[];
+  idx: number;
+}
+
 export interface ErrInfo {
   help: string;
   errorIdx: number;
@@ -191,8 +200,3 @@ export interface ErrInfo {
   candWord: string;
 }
 
-export interface SpellResponse {
-  str: string;
-  errInfo: ErrInfo[];
-  idx: number;
-}
