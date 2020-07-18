@@ -26,12 +26,15 @@ connection.onInitialize(() => {
 });
 const getErrorList = async (text) => {
     connection.console.info(`getting error list`);
+    if (text == "") {
+        return [];
+    }
     return axios_1.default
         .post("http://speller.cs.pusan.ac.kr/results", queryString.stringify({ text1: text.replace(/\n/g, "\r") }))
         .then(({ data }) => {
         var _a, _b;
         const startIndex = data.indexOf("data = [{");
-        const nextIndex = data.indexOf("}];\n");
+        const nextIndex = data.indexOf("}];");
         const rawData = data.substring(startIndex + 7, nextIndex + 2);
         let xxx = JSON.parse(rawData);
         return (_b = (_a = xxx[0]) === null || _a === void 0 ? void 0 : _a.errInfo) === null || _b === void 0 ? void 0 : _b.map((match) => {

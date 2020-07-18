@@ -1,16 +1,19 @@
 {
   "name": "korean-ls",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Language server implementation for Korean",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"No test\" specified.",
+    "dev": "npm run-script build && npm link",
     "build": "tsc"
   },
   "bin": {
     "korean-ls": "./main.js"
   },
-  "keywords": [],
+  "keywords": [
+    "korean",
+    "lsp"
+  ],
   "author": "aca",
   "license": "ISC",
   "dependencies": {
