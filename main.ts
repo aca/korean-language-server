@@ -42,6 +42,11 @@ connection.onInitialize(() => {
 
 const getErrorList = async (text: string): Promise<any[]> => {
   connection.console.info(`getting error list`);
+
+  if(text == "") {
+    return [];
+  }
+
   return axios
     .post(
       "http://speller.cs.pusan.ac.kr/results",
@@ -49,7 +54,7 @@ const getErrorList = async (text: string): Promise<any[]> => {
     )
     .then(({ data }) => {
       const startIndex = data.indexOf("data = [{");
-      const nextIndex = data.indexOf("}];\n");
+      const nextIndex = data.indexOf("}];");
 
       const rawData = data.substring(startIndex + 7, nextIndex + 2);
       let xxx: SpellerResponse[] = JSON.parse(rawData);
