@@ -3,7 +3,7 @@
 powered by [한국어 맞춤법/문법 검사기](https://speller.cs.pusan.ac.kr/).  
 
 It's Korean version of [grammarly](http://www.grammarly.com/), famous writing assitant app for English.  
-As grammarly does, it detects Korean grammar error, also supports code action. It also supports some level of english.
+As grammarly does, it detects Korean grammar error, supports code action.
 
 ![sample](./sample.gif)
 
@@ -24,10 +24,10 @@ npm link
 ---
 ### Integration
 
-Should work with any client implementation, vscode/emacs/sublime/vim.
+Should work with any lsp client implementation, vscode/emacs/sublime/vim.
 
 - vim/neovim, [ coc.nvim ](https://github.com/neoclide/coc.nvim)
-  ```
+  ```json
   "languageserver": {
     "korean": {
       "command": "korean-ls",
@@ -36,7 +36,9 @@ Should work with any client implementation, vscode/emacs/sublime/vim.
     },
   ```
 - nvim-lsp
-  ```
+  ```lua
+  local nvim_lsp = require'nvim_lsp'
+  local configs = require'nvim_lsp/configs'
   configs.korean_ls = {
     default_config = {
       cmd = {'korean-ls', '--stdio'};
@@ -47,7 +49,6 @@ Should work with any client implementation, vscode/emacs/sublime/vim.
       settings = {};
     };
   }
-  nvim_lsp.korean_ls.setup{
-    on_attach = on_attach;
-  }
+
+  nvim_lsp.korean_ls.setup{}
   ```
